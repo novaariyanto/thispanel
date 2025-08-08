@@ -29,9 +29,8 @@ class Group extends CI_Controller
             $cekstatus = $this->whatsva->statusInstance($data->instance_key,$datasetting->panel_key);
             $cekstatus = json_decode($cekstatus);
         
-            if($cekstatus->success){
-                if($cekstatus->data->status==="authenticated"){
-                    $response = $this->whatsva->sendMessageTextGroup($data->instance_key, $data->jid, $data->message,$datasetting->panel_key);
+            if($cekstatus->connected){
+                 $response = $this->whatsva->sendMessageTextGroup($data->instance_key, $data->jid, $data->message,$datasetting->panel_key);
                     $response = json_decode($response);
                   
                     if($response){
@@ -44,10 +43,6 @@ class Group extends CI_Controller
                     }else{
                         $response = ["success"=>false,"message"=>"cant connect to server"];
                     }
-                    
-                }else{
-                    $response =["success" => false, "message" => "your instance/ device is disconnect"];
-                }
             }else{
                 $response = ["success" => false, "message" => "cant connect server "];
             }

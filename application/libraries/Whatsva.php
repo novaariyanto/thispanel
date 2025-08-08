@@ -106,7 +106,7 @@ class Whatsva
             "instance_key" => $instance_key
             , "panel_key" => $panel_key];
             
-        return $this->curlData2_get($this->ws_url() . "/sessions/status/$instance_key?id=".$instance_key, $data);
+        return $this->curlData2_get($this->ws_url() . "/sessions/status?id=".$instance_key, $data);
     }
     
     public function updateMultideviceInstance($instance_key, $panel_key,$multidevice)
@@ -152,10 +152,12 @@ class Whatsva
     public function sendMessageText($instance_key, $jid, $message, $panel_key)
     {
         $data = [
-            "instance_key" => $instance_key,
+            "sessionId" => $instance_key,
             "jid" => $jid,
             "message" => $message,
             "panel_key" => $panel_key];
+          
+        // echo json_encode($data);
         return $this->curlData($this->ws_url() . "/chats/sendMessageText?id=".$instance_key, $data);
     }
     public function sendImageUrl($instance_key, $jid, $imageUrl, $caption, $panel_key)
@@ -271,12 +273,12 @@ class Whatsva
     public function sendMessageTextGroup($instance_key, $jid, $message, $panel_key)
     {
         $data = [
-            "instance_key" => $instance_key,
+            "sessionId" => $instance_key,
             "jid" => $jid,
             "message" => $message
             , "panel_key" => $panel_key];
-           
-        return $this->curlData($this->ws_url() . "/groups/sendMessageText?id=".$instance_key, $data);
+           print_r($data);
+        return $this->curlData($this->ws_url() . "/group-message/sendMessageText?id=".$instance_key, $data);
     }
     public function sendImageUrlGroup($instance_key, $jid, $imageUrl, $caption, $panel_key)
     {

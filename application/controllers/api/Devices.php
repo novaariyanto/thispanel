@@ -54,8 +54,9 @@ class Devices extends CI_Controller
         }else {
             $datasetting = $this->setting_model->getSetting();
             
-            $qr = $this->whatsva->generatedQr2($data->instance_key,$datasetting->panel_key,"1");
-            print_r($qr);
+            $this->whatsva->generatedQr($data->instance_key,$datasetting->panel_key,"1");
+            $qr = $this->whatsva->getQR($data->instance_key,$datasetting->panel_key,"1");
+           print_r($qr);
         }
 
        
@@ -104,6 +105,7 @@ class Devices extends CI_Controller
         } else {
             $datasetting = $this->setting_model->getSetting();
             $data_device = $this->device_model->getWhere(["api_key"=>$data->instance_key]);
+            print_r($data_device);
          
             $qr = $this->whatsva->resetInstance($data_device->api_key,$datasetting->panel_key);
             $qr = json_decode($qr);
