@@ -87,6 +87,7 @@ class Whatsva
         $data = [
             "instance_key" => $instance_key
             , "panel_key" => $panel_key];
+           
             
         return $this->curlData2_get($this->ws_url() . "/sessions/qr?id=".$instance_key, $data);
     }

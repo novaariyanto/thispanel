@@ -183,10 +183,11 @@ class Devices extends CI_Controller
         if($remaining < 1){
             echo json_encode(["success"=>false,"message"=>"Pay your bill, to use this feature"]);
         }else{
+          
             if ($data_device) {
                 $data = $this->whatsva->getQR($data_device->api_key,$datasetting->panel_key,1);
                 $data = json_decode($data);
-               
+              
 
                 if($data){
                   
