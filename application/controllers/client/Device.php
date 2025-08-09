@@ -159,11 +159,12 @@ class Device extends CI_Controller
         if (count((array) $data_device)) {
             $sI = $this->whatsva->statusInstance($data_device->api_key,$datasetting->panel_key);
             $status_I = json_decode($sI);
-        
-            if(!$status_I->success ){
+          
+            if(!$status_I->connected ){
                
                 $qr = $this->whatsva->generatedQr($data_device->api_key,$datasetting->panel_key,$data_device->multidevice);
                 $qr = json_decode($qr);
+               
                 // if($qr->message == "Session ID sudah ada"){
                 //     redirect('./device');
                 // }

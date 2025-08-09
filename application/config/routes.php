@@ -126,6 +126,7 @@ $route['package/edit/(:any)'] = 'admin/package/edit/$1';
 $route['package/delete/(:any)'] = 'admin/package/delete/$1';
 
 $route['api/device/detail/(:any)'] = 'api/devices/getQR/$1';
+$route['api/getQR2/(:any)'] = 'api/devices/getQR/$1';
 $route['api/device/generateQrs'] = 'api/devices/generateQr';
 
 $route['api/device/resetInstance'] = 'api/devices/resetInstance';
