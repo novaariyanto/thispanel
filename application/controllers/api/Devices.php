@@ -54,13 +54,14 @@ class Devices extends CI_Controller
         }else {
             $datasetting = $this->setting_model->getSetting();
             
-            $this->whatsva->generatedQr($data->instance_key,$datasetting->panel_key,"1");
-            $qr = $this->whatsva->getQR($data->instance_key,$datasetting->panel_key,"1");
+           $qr = $this->whatsva->generatedQr($data->instance_key,$datasetting->panel_key,"1");
+          
            print_r($qr);
         }
 
        
     }
+
     public function statusInstance()
     {
         $json = file_get_contents('php://input');
@@ -157,53 +158,29 @@ class Devices extends CI_Controller
 		$datasetting = $this->setting_model->getSetting();
         $data_device = $this->device_model->getbyId($device);
 
-
-        $data['current_user'] = $this->auth_model->current_user();
-        $data['transaksi']= $this->transaksi_model->getWhere2(["id_user" => $data['current_user']->id,"status_paid"=>"3"]);
-		$active_day = 0;
-		
-		foreach ($data['transaksi'] as $a => $value) {
-			# code...
-			$active_day += $value->day_value;
-			
-		}
-		 $start_date = substr($data['current_user']->start_date,0,10);
-		
-		 $data['active_day'] = $active_day;
-		
-		$date	= date_create( $start_date);
-		$d 		= date_add($date,date_interval_create_from_date_string($active_day." days"));
-		$end_date = date_format($date,"d-M-Y");
-		$data['end_date'] = $end_date;
-		$data['start_date'] = date_format(date_create($start_date),"d-M-Y");
-		 $a = new DateTime(date('d-M-Y'));
-		 $b = new DateTime($end_date);
-		
-		 $remaining = $b->diff($a)->days; 
-        if($remaining < 1){
-            echo json_encode(["success"=>false,"message"=>"Pay your bill, to use this feature"]);
-        }else{
+        if ($data_device) {
+            $data = $this->whatsva->getQR($data_device->api_key,$datasetting->panel_key,1);
+            $data = json_decode($data);
           
-            if ($data_device) {
-                $data = $this->whatsva->getQR($data_device->api_key,$datasetting->panel_key,1);
-                $data = json_decode($data);
+            if($data){
+                if($data->success){
               
-
-                if($data){
-                  
-                        if ($data->message === "WhatsApp sudah terhubung") {
-                            $updateStatus = $this->device_model->update(["status" => 2], $data_device->id);
+                    if ($data->message === "WhatsApp sudah terhubung") {
+                        $updateStatus = $this->device_model->update(["status" => 2], $data_device->id);
                         }
-                        
+
                         echo json_encode(["success"=>"true","data"=>["qr"=>$data->qr]]);
-        
+                    }else{
+                        echo json_encode(["success"=>false,"message"=>$data->message]);
+             
+                    }
+    
                 }else{
                     echo json_encode(["success"=>false,"message"=>"cant connect to server"]);
                 }
-              
-    
             }
-        }
+          
+   
 
 
      

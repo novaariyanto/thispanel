@@ -73,12 +73,12 @@ class Whatsva
     public function generatedQr($instance_key, $panel_key,$multidevice)
     {
         $data = [
-             "id" => $instance_key,
+             "instance_key" => $instance_key,
              "isLegacy"=>($multidevice=="0")?false:true,
              "panel_key" => $panel_key,
              "panel_domain"=> base_url()
         ];
-       
+        
 
         return $this->curlData2($this->ws_url() . "/sessions/add?id=".$instance_key, $data);
     }
@@ -545,6 +545,8 @@ class Whatsva
         $datasetting = $this->_CI->sm->getSetting();
         
         // array_push($data);
+      
+       
         $data['panel_key'] = $datasetting->panel_key;
         $data['panel_domain'] = $datasetting->domain;
 
